@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block main %}
+    <!-- this is only for /viewprofile if the profile is invalid -->
+    {% if error %}
+         <div class="alert alert-info" role="alert">
+              {{error}}
+        </div>
+    {% else %}
+    <!-- For every post passed in by application.py, show the image and information about the post, also link to comment section -->
+    {% for post in posts %}
+    <div>
+    <h1>{{post['title']}}</h1>
+    <small>By <a href="/viewprofile?q={{post['username']}}" style="color: black !important">{{post['username']}}</a></small>
+    <form action="/viewpost" method="post">
+    <img src="./static/photos/{{post['image']}}" alt="post" class="img-fluid">
+    <button class ="btn btn-light" style ="comments" name="comments" type="submit" value="{{post['id']}}"> <img src="./static/comments.PNG"></button>
+    <i style="comment_number"> {{post['comment_count']}} </i>
+    </form>
+    <p>{{post['time']}}</p>
+    </div>
+    <hr>
+    {% endfor %}
+<div>
+    <!-- show next and previous buttons except if on first page, then only show next -->
+    {% if page != 0 %}
+    <form action="/" method="get">
+        <button class="btn btn-primary" type="submit" name="p" value="{{page - 1}}">Previous</button>
+        <button class="btn btn-primary" type="submit" name="p" value="{{page + 1}}">Next</button>
+    </form>
+    {% else %}
+    <form action="/" method="get">
+        <button class="btn btn-primary" type="submit" name="p" value="{{page + 1}}">Next</button>
+    </form>
+    {% endif %}
+
+</div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{username}}
+{% endblock %}
+
+
+
+{% block main %}
+
+<h1>{{username}}'s Portfolio</h1>
+<hr>
+
+    {% for post in posts %}
+    <div>
+    <h1>{{post['title']}}</h1>
+    <form action="/viewpost" method="post">
+    <img src="./static/photos/{{post['image']}}" alt="post" class="img-fluid">
+    <button class ="btn btn-light" style ="comments" name="comments" type="submit" value="{{post['id']}}"> <img src="./static/comments.PNG"></button>
+    <i style="comment_number"> {{post['comment_count']}} </i>
+    </form>
+    <p>{{post['time']}}</p>
+
+    {% if post['artist'] == user %}
+        <form action="/deletepost" method="post"><button style="background-color: red;" class="btn btn-primary" name="delete" value="{{post['id']}}"type="submit">Delete</button></form>
+    {% endif %}
+    </div>
+    <hr>
+    {% endfor %}
+
+{% endblock %}

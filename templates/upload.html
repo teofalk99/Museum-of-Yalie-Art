@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Upload
+{% endblock %}
+
+{% block main %}
+    {% if error %}
+        <div class="alert alert-info" role="alert">
+              {{error}}
+        </div>
+    {% endif %}
+    <p></p>
+    <form action="/upload" method="post" enctype=multipart/form-data>
+        <div class="form-group">
+            <input name = "image" type="file" accept="image/*" onchange="loadFile(event)">
+            <img id="preview" class="img-fluid">
+            <!-- show a preview of a file when the input changes -->
+            <script>
+                var loadFile = function(event)
+                {
+                var preview = document.getElementById('preview');
+                preview.src = URL.createObjectURL(event.target.files[0]);
+                preview.onload = function()
+                {
+                URL.revokeObjectURL(preview.src)
+                }
+                };
+            </script>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="title" autocomplete="off" placeholder="Title" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Upload!</button>
+    </form>
+{% endblock %}

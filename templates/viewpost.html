@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    View Post
+{% endblock %}
+
+{% block main %}
+
+    <div>
+    <h1>{{post['title']}}<small>By <a href="/viewprofile?q={{post['username']}}" style="color: black !important">{{post['username']}}</a></small></h1>
+    <img src="./static/photos/{{post['image']}}" alt="post" class="img-fluid">
+    <p>{{post['time']}}
+
+    <!-- if it's the user's own post, add a delete button -->
+    {% if user == post['username'] %}
+        <form action="/deletepost" method="post"><button style="background-color: red;" class="btn btn-primary" name="delete" value="{{post['id']}}"type="submit">Delete</button></form>
+    {% endif %}
+
+    </p>
+    </div>
+    <hr>
+    <!-- if comments, show all of them -->
+    {% for comment in comments %}
+
+        <div style="text-align: left">
+        <b><a href="/viewprofile?q={{comment['username']}}" style="color: black !important">{{comment['username']}}</a></b>
+        <i style="float:right;text-align:right">{{comment['time']}}</i>
+        <p class="form-control" id="comment_box">{{comment['comment']}}</p>
+        </div>
+        <hr>
+
+    {% endfor %}
+    <!-- show different placeholder depending on if there are comments or not -->
+    <form action="/postcomment" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus="off" class="form-control" id="comment_box" name="comment_field"
+            {% if comments %}
+                placeholder="Write a comment!"
+            {% else %}
+                placeholder="Be the first to comment!"
+            {% endif %}
+                type="text">
+            <input type="hidden" name="post_id" value="{{post['id']}}"/>
+            <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+{% endblock %}
